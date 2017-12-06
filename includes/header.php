@@ -11,6 +11,7 @@ session_start();
 //$_SESSION['admin']=true;  //pretend user is an admin
 
 //var_dump($_SESSION);
+ob_start(); // turn output buffering on
 
 /* ************************************************************** */
 /* Autoloading Classes

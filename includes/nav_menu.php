@@ -48,25 +48,25 @@
             <a class="dropdown-item" href="articles.php"><i class="fa fa-list" aria-hidden="true"></i> All Articles</a>
             
             <?php
-            //Call the getCategoryList method from the DbHandler to retrieve 
-            //the actual categories from the database
-            $data = $dbh->getCategoryList();
-            //check for any errors first
-            if($data['error']==false){
-                //no error - get data items
-                $catItems = $data['items'];
-                //var_dump($catItems);
-                //loop each catItems and build menu
-                foreach($catItems as $item){
-                    $catId = $item['id'];
-                    $category = $item['category'];
-                    $total = $item['total'];
-                    echo "<a class='dropdown-item' href='articlesbycategory.php?id=$catId'>
-                            <span class='badge badge-pill badge-light'>$total</span> 
-                            $category
-                         </a>";
+                //Call the getCategoryList method from the DbHandler to retrieve 
+                //the actual categories from the database
+                $data = $dbh->getCategoryList();
+                //check for any errors first
+                if($data['error']==false){
+                    //no error - get data items
+                    $catItems = $data['items'];
+                    //var_dump($catItems);
+                    //loop each catItems and build menu
+                    foreach($catItems as $item){
+                        $catId = $item['id'];
+                        $category = $item['category'];
+                        $total = $item['total'];
+                        echo "<a class='dropdown-item' href='articlesbycategory.php?id=$catId'>
+                                <span class='badge badge-pill badge-light'>$total</span> 
+                                $category
+                             </a>";
+                    }
                 }
-            }
             ?>
 <!--            <a class="dropdown-item" href="articlesbycategory.php?id=1"><span class="badge badge-pill badge-light">2</span> Database Security</a>
             <a class="dropdown-item" href="articlesbycategory.php?id=7"><span class="badge badge-pill badge-light">3</span> General Web Security</a>
@@ -74,22 +74,29 @@
         </div>
     </li>
     <!-- Account dropdown -->
+
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="accountdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-user" aria-hidden="true"></i> Account
         </a>
-        <div class="dropdown-menu" aria-labelledby="accountdropdown">            
-            <!-- Non-authenticated user -->
-            <a class="dropdown-item" href="register.php"><i class="fa fa-user" aria-hidden="true"></i> Register</a>
-            <a class="dropdown-item" href="login.php"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
-            <!-- Registered user only -->
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="account.php"><i class="fa fa-user-secret" aria-hidden="true"></i> My Account </a>
-            <a class="dropdown-item" href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>
-            <!-- Admin user only -->
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="admin.php"><i class="fa fa-user-secret" aria-hidden="true"></i> Admin </a>
-            <a class="dropdown-item" href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>
+        <div class="dropdown-menu" aria-labelledby="accountdropdown"> 
+            <?php
+                if( !empty($_SESSION['user_id']) && $_SESSION['admin'] ) {
+                    // admin user
+                    echo '<a class="dropdown-item" href="admin.php"><i class="fa fa-user-secret" aria-hidden="true"></i> Admin </a>
+                          <a class="dropdown-item" href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>';
+                } 
+                elseif(!empty($_SESSION['user_id'])) {
+                    // registered user
+                    echo '<a class="dropdown-item" href="account.php"><i class="fa fa-user-secret" aria-hidden="true"></i> My Account </a>
+                          <a class="dropdown-item" href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>';
+                }
+                else {
+                    // non-authenticated user
+                    echo '<a class="dropdown-item" href="register.php"><i class="fa fa-user" aria-hidden="true"></i> Register</a>
+                          <a class="dropdown-item" href="login.php"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>';
+                }
+            ?>
         </div>
     </li>
 </ul>
